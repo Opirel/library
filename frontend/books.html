@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <form>
+        <lable for="BookName">Book Name</lable>
+        <input id="BookName" type="text" value="test" name="BookName" required>
+
+        <lable for="Author">Author</lable>
+        <input id="Author" type="text" value="test" name="Author" required>
+        <lable for="YearPublished">YearPublished</lable>
+        <input id="YearPublished" type="text" value="test" name="YearPublished" required>
+        <lable for="Type">Type</lable>
+        <input id="Type" type="number" value="1" name="Type" required>
+        <input type="button" value="add a book" onclick="Add_Book()">
+    </form>
+
+    <div>
+        <input style="background-color: aquamarine; margin-left: 50px;" type="text" id="searchBox" placeholder="Search books...">
+        <button onclick="searchBooks()">Search</button>
+    </div>
+    <ul id="booksList"></ul>
+    <h2>Available Books</h2>
+    <div id="books-container"></div>
+
+    <script>
+        const MY_SERVER = "http://127.0.0.1:5000"
+        // add code
+        function Add_Book() {
+            axios.post(`${MY_SERVER}/books`, {
+                BookName: document.getElementById('BookName').value,
+                Author: document.getElementById('Author').value,
+                YearPublished: document.getElementById('YearPublished').value,
+                Type: document.getElementById('Type').value
+            })
+                .then(response => {
+                    console.log(response.data);
+                })
+                
+        }
+
+        function searchBooks() {
+            const query = document.getElementById('searchBox').value;
+
+            axios(`${MY_SERVER}/books/${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const booksList = document.getElementById('booksList');
+                booksList.innerHTML = '';
+                data.forEach(book => {
+                    const li = document.createElement('li');
+                    li.textContent = book.BookName + ' - ' + book.Author;
+                    booksList.appendChild(li);
+                });
+            })
+        }
+
+
+        // display code
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     axios.get(`${MY_SERVER}/books`)
+        //         .then(function (response) {
+        //             const books = response.data;
+
+        //             // Convert the books data to a JSON string
+        //             const booksJsonString = JSON.stringify(books, null, 2);
+        //             console.log('Books JSON:', booksJsonString);
+
+        //             const booksHtml = books.map(function (book) {
+        //                 return `<p>${book.BookName} by ${book.Author} (${book.YearPublished})</p>`;
+        //             }).join('');
+        //             document.getElementById('books-container').innerHTML = booksHtml;
+        //         })
+        //         .catch(function (error) {
+        //             console.error('Error fetching books:', error);
+        //             alert('Error loading books');
+        //         });
+        // });
+    </script>
+</body>
+
+</html>

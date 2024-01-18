@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+<body>
+    <form>
+        <lable for="CustomerName">Customer Name</lable>
+        <input id="CustomerName" type="text" value="test" name="CustomerName" required>
+
+        <lable for="City">City</lable>
+        <input id="City" type="text" value="test" name="City" required>
+
+        <lable for="Age">Age</lable>
+        <input id="Age" type="text" value="test" name="Age" required>
+
+        <input type="button" value="add a customer" onclick="Add_customer()">
+      
+    </form>
+
+    <script>
+        const MY_SERVER= "http://127.0.0.1:5000"
+        // add code
+    function Add_customer() {
+        axios.post(`${MY_SERVER}/customers`, {
+            CustomerName: document.getElementById('CustomerName').value,
+            City: document.getElementById('City').value,
+            Age: document.getElementById('Age').value
+            })
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+        
+        
+        // display code
+        // (document).ready(function() {
+        //     $.ajax({
+        //         url: '/books',
+        //         type: 'GET',
+        //         success: function(books) {
+        //             var booksHtml = books.map(function(book) {
+        //                 return '<p>' + book.BookName + ' by ' + book.Author + ' (' + book.YearPublished + ')</p>';
+        //             }).join('');
+        //             $('#books-container').html(booksHtml);
+        //         },
+        //         error: function() {
+        //             alert('Error loading books');
+        //         }
+        //     });
+        // });
+    </script>
+</body>
+</html>
